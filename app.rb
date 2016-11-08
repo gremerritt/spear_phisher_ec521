@@ -29,6 +29,10 @@ def main
           next if to.include?('|') || from.include?('|')
 
           text = tweet.text.gsub("|", " ").gsub("\n", " ").gsub("\r", " ")
+
+          # this regex removes @ mentions and links from the text
+          # in order to prevent 'duplicate' tweets (i.e. bulk tweets
+          # sent from one user to many others) from being collected
           text_abbr = text.gsub(/(?<=^|\s)@(\S+)($|\s)/, "").gsub(/(?<=^|\s)http(\S+)($|\s)/, "")
 
           if rslts[from].nil?
@@ -43,9 +47,6 @@ def main
                                   :timestamp => tweet.created_at.to_i}}
             cnt += 1
           elsif rslts[from][to].nil?
-            # this regex removes @ mentions and links from the text
-            # in order to prevent 'duplicate' tweets (i.e. bulk tweets
-            # sent from one user to many others) from being collected
             dup = rslts[from].any? { |key, val| text_abbr == val[:text_abbr] }
             if !dup
               rslts[from][to] = {:id => tweet.id,
