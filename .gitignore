@@ -1,2 +1,7 @@
 *.yml
 *.csv
+
+# Mihailo
+venv/
+*.pyc
+*.swp
