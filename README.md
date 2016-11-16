@@ -4,11 +4,11 @@ THIS APPLICATION IS TO BE USED FOR EDUCATIONAL PURPOSES ONLY.
 
 ## About
 
-The app.rb script has two functions, described below:
+The app.rb script has two functions, described below.
 
 ### Collect random tweets
 
-The script collects tweets that are from one user to another user and which contain a link, and records them in a file called `tweets.csv`. This is a pipe-delimited file with the format:
+The script collects tweets and records them in a pipe-delimited file called, with the format:
 
     Tweet ID
     From Username
@@ -22,11 +22,20 @@ The script collects tweets that are from one user to another user and which cont
     Tweet Text
     Tweet Text Abbreviated (excludes @-mentions and links)
 
-It attempts to exclude duplicate tweets from one user to multiple other users that contain the same text (by comparing the abbreviated text, as described above). If the `tweets.csv` file already exists when the script runs, those results are kept.
+There is an option to collect tweets only from specific groups. This uses a file of keywords to search for. The currently defined groups are:
+
+    cybersecurity
+    politics
+    science
+    sports
+
+For each group defined, there should be a set of credentials and a keyword file called `<group>_keywords.txt`. The config file `config.yml` should look like `config_sample.yml`.
+
+If no group is provided, the default credentials will be used and no keywords will be used. By default, we won't specifically search for tweets with links. You can provide the `--links=true` option to search only for tweets with links.
 
 To collect tweets, run:
 
-    $ ruby app.rb collect
+    $ ruby app.rb collect [--group=<group>] [--links=true/false]
 
 ### Find recent tweets with a hashtag
 
