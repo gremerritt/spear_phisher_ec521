@@ -1,3 +1,8 @@
 *.yml
 *.csv
 !config_sample.yml
+
+# Mihailo
+venv/
+*.pyc
+*.swp
