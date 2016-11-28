@@ -4,5 +4,6 @@
 
 # Mihailo
 venv/
+*.h5
 *.pyc
 *.swp
