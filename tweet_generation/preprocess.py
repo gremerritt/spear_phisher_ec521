@@ -41,6 +41,7 @@ def clean_tweets(tweets):
     Removes urls, mentions, hashtags, and removes non-common characters from each tweet.
     """
     for index, tweet in enumerate(tweets):
+        tweet = tweet.lower()
         tweet = _replace_urls(tweet)
         tweet = _replace_mentions(tweet)
         tweet = _replace_hashtags(tweet)
