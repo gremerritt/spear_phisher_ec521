@@ -1,22 +1,77 @@
 import re
+import codecs
 
 
-def load_tweets(path):
+def load_tweets(path="data/tweets300k.csv"):
     """
     Returns the tweet column from the csv file.
     (CSV in this case uses "|" as the delimiter because "," appears in the text more often)
     """
-    f = open(path, 'r')
+    # f = open(path, 'r')
+    f = codecs.open(path, encoding='utf-8')
     lines = f.readlines()
     tweets = [t.split('|')[-2] for t in lines]
 
     return tweets
 
 
-def replace_mentions(tweet, exp, text="@"):
-    return re.sub('@[0-9a-zA-Z]+', text, tweet) 
+def _replace_mentions(tweet, text="AT"):
+    return re.sub('@[0-9a-zA-Z_]+', text, tweet) 
 
 
-def replace_urls(tweet, text="URL"):
+def _replace_hashtags(tweet, text="HASH"):
+    return re.sub('#[0-9a-zA-Z_]+', text, tweet) 
+
+
+def _replace_urls(tweet, text="URL"):
     return re.sub('https?:\/\/t\.co\/[a-zA-Z0-9]*', text, tweet)
+
+
+whitelist = re.compile(ur'[^!()-,\.\/0123456789:;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz\n\t ]')
+def _remove_extra_characters(tweet):
+    """
+    Removes characters not found in the whitelist above. 
+    The ^ performs a negation of the set and the regex finds everything else, and replaces it with ''.
+    """
+    return re.sub(whitelist, '', tweet)
+
+
+def clean_tweets(tweets):
+    """
+    Removes urls, mentions, hashtags, and removes non-common characters from each tweet.
+    """
+    for index, tweet in enumerate(tweets):
+        tweet = _replace_urls(tweet)
+        tweet = _replace_mentions(tweet)
+        tweet = _replace_hashtags(tweet)
+        tweet = _remove_extra_characters(tweet)
+
+        tweets[index] = tweet
+
+    return tweets
+
+
+def _find_most_common_characters(tweets):
+    """
+    Returns the most common characters in a Counter object.
+    The method counter.most_common() will show the most common characters
+    sorted by frequency. Useful for checking if our cleaning is good.
+    """
+    from collections import Counter
+    return Counter("".join(tweets))
+
+
+def long_tweets(tweets, length=20):
+    """
+    Returns tweets longer than a given length
+    """
+    return [t for t in tweets if len(t) > length]
+    
+
+def main():
+    tweets = load_tweets("data/tweets300k.csv")
+    tweets = clean_tweets(tweets)
+    return tweets
+
+
     
