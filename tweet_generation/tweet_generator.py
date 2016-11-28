@@ -20,23 +20,28 @@ import numpy as np
 import random
 import sys
 
-path = get_file('nietzsche.txt', origin="https://s3.amazonaws.com/text-datasets/nietzsche.txt")
-text = open(path).read().lower()
-print('corpus length:', len(text))
+# path = get_file('nietzsche.txt', origin="https://s3.amazonaws.com/text-datasets/nietzsche.txt")
+# text = open(path).read().lower()
+import preprocess
+tweets = preprocess.clean_tweets(preprocess.load_tweets())
+print('number of tweets:', len(tweets))
 
-chars = sorted(list(set(text)))
+chars = sorted(list(set("".join(tweets))))
 print('total chars:', len(chars))
 char_indices = dict((c, i) for i, c in enumerate(chars))
 indices_char = dict((i, c) for i, c in enumerate(chars))
 
 # cut the text in semi-redundant sequences of maxlen characters
-maxlen = 40
-step = 3
+maxlen = 30
+step = 2
 sentences = []
 next_chars = []
-for i in range(0, len(text) - maxlen, step):
-    sentences.append(text[i: i + maxlen])
-    next_chars.append(text[i + maxlen])
+for tweet in tweets:
+    if len(tweet) + 1 > maxlen:
+        for i in range(0, len(tweet) - maxlen, step):
+            sentences.append(tweet[i : i + maxlen])
+            next_chars.append(tweet[i + maxlen])
+            
 print('nb sequences:', len(sentences))
 
 print('Vectorization...')
