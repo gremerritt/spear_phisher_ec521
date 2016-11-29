@@ -1,76 +1,125 @@
 # spear_phisher_ec521
 
-THIS APPLICATION IS TO BE USED FOR EDUCATIONAL PURPOSES ONLY.
+THIS APPLICATION IS TO BE USED FOR EDUCATIONAL PURPOSES ONLY. It was written as a Cybersecurity project based on [this Blackhat talk](https://www.blackhat.com/docs/us-16/materials/us-16-Seymour-Tully-Weaponizing-Data-Science-For-Social-Engineering-Automated-E2E-Spear-Phishing-On-Twitter.pdf).
 
-## About
+## Compiling and Installing
 
-The app.rb script has two functions, described below.
+We'll assume you're installing on Kali Linux, using Python2.7 and Ruby2.2+ (though instructions should be similar for different platforms / versions.)
 
-### Collect random tweets
+This application comes with a pre-trained Neural Network which generated tweets based on a large sample. Instructions for collecting training data and training the NN can be found [below](#TrainingYourOwnModel).
 
-The script collects tweets and records them in a pipe-delimited file called, with the format:
+To install, simply run:
 
-    Tweet ID
-    From Username
-    To Username
-    From User ID
-    To User ID
-    In Reply To Tweet ID
-    Favorite Count
-    Retweet Count
-    Unix Timestamp
-    Tweet Text
-    Tweet Text Abbreviated (excludes @-mentions and links)
+    $ ./install.sh
 
-There is an option to collect tweets only from specific groups. This uses a file of keywords to search for. The currently defined groups are:
+in the project directory. This will install all dependancies and install the project. If this doesn't work, you can follow along manually below.
 
-    cybersecurity
-    politics
-    science
-    sports
+First install the Python dependancies:
 
-For each group defined, there should be a set of credentials and a keyword file called `<group>_keywords.txt`. The config file `config.yml` should look like `config_sample.yml`.
+Install `TensorFlow`. General instructions are [here](https://www.tensorflow.org/versions/r0.12/get_started/os_setup.html). TL;DR
 
-If no group is provided, the default credentials will be used and no keywords will be used. By default, we won't specifically search for tweets with links. You can provide the `--links=true` option to search only for tweets with links.
+    $ pip install tensorflow
 
-To collect tweets, run:
+Install `keras`. General instructions are [here](https://github.com/fchollet/keras#Installation). TL;DR
 
-    $ ruby app.rb collect [--group=<group>] [--links=true/false]
+    $ sudo pip install keras
 
-### Find recent tweets with a hashtag
+Install `h5py`:
 
-The script will find recent tweets that contain a specific hashtag. For the users associated with those tweets, we will collect up to their most recent ~3200 tweets.
+    $ pip install h5py
 
-In code, the `users` hash (on line 59 of app.rb) will have the following format:
+Now for the Ruby. Make sure bundler is up-to-date:
 
-    users = {<user1>: [
-                       {:id             => <user1_tweet1_id>,
-                        :text           => <user1_tweet1_text>,
-                        :text_abbr      => <user1_tweet1_text_abbr>,
-                        :favorite_count => <user1_tweet1_favorite_count>,
-                        :timestamp      => <user1_tweet1_timestamp>},
-                       {:id             => <user1_tweet2_id>,
-                        :text           => <user1_tweet2_text>,
-                        :text_abbr      => <user1_tweet2_text_abbr>,
-                        :favorite_count => <user1_tweet2_favorite_count>,
-                        :timestamp      => <user1_tweet2_timestamp>},
-                       ...],
-             <user1>: [
-                       {:id             => <user2_tweet1_id>,
-                        :text           => <user2_tweet1_text>,
-                        :text_abbr      => <user2_tweet1_text_abbr>,
-                        :favorite_count => <user2_tweet1_favorite_count>,
-                        :timestamp      => <user2_tweet1_timestamp>},
-                       {:id             => <user2_tweet2_id>,
-                        :text           => <user2_tweet2_text>,
-                        :text_abbr      => <user2_tweet2_text_abbr>,
-                        :favorite_count => <user2_tweet2_favorite_count>,
-                        :timestamp      => <user2_tweet2_timestamp>},
-                       ...],
-              ...}
+    $ gem update bundler
 
-To run:
+Install the dependancies:
 
-    $ ruby app.rb target '#hashtag' 10
+    $ bundle install
 
-The last parameter is the max number of users to collect, and defaults to 10.
+Now build the project:
+
+    $ bundle exec rake install
+
+You should get the message:
+
+    spearphisher 0.0.1 built to pkg/spearphisher-0.0.1.gem.
+    spearphisher (0.0.1) installed.
+
+## Running
+
+You can run the following to get detailed command-line options
+
+    $ spearphisher -h
+    $ spearphisher [COMMAND] -h
+
+First, copy or rename the `config_sample.yml` file to `config.yml`. Follow [these instructions](#CreateATwitterClient) for creating credentials. As should be obvious from the format of the config file, you can set up different accounts and control which account you use for any given run.
+
+To create a phishing tweet to a specific user, use:
+
+    $ spearphisher target --user <username>
+
+You can also find users to target using a hashtag:
+
+    $ spearphisher target --hashtag "#sometag"
+
+The full list of options is below:
+
+    OPTIONS:
+
+      --group [cybersecurity/politics/science/sports/default]
+          Credential set to use (keyword file must also exist in lib/keywords)
+
+      --send [true/false]
+          Actually tweet at users (USE WITH CAUTION)
+          Default: false
+
+      --hashtag [#<text>]
+          Hashtag to search for
+
+      --user [username]
+          User to target
+
+      --count [#]
+          Number of users to target
+          Default: 10
+
+      --display_tweets [true/false]
+          Display the tweets collected for a user
+          Default: false
+
+
+<a name="TrainingYourOwnModel"></a>
+## Training Your Own Model
+
+### Generating Sample Tweets
+
+Running the following will generate a file of sample recent and popular tweets.
+
+    $ spearphisher collect
+
+If you'd like to target specific groups, you can create a file in lib/keywords with a list of keywords to use in the collection. The list of options for the `collect` command is:
+
+    OPTIONS:
+
+      --group [cybersecurity/politics/science/sports/default]
+          Group to collect tweets for, based on keywords in lib/keywords
+
+      --links [true/false]
+          Collect only tweets that include links
+          Default: false
+
+### Training the Neural Network
+
+<a name="CreateATwitterClient"></a>
+## Creating a Twitter Client
+
+Go to [twitter.com](https://twitter.com) and log in to your account, or create a new one. Make sure you've provided your phone number, as you will not be able to generate API credentials without it on file. Once you're logged into you account go to [dev.twitter.com](https://dev.twitter.com) and click on "My apps". Click "Create New App" and fill in the required fields. Once your application is created, open the settings for the application and click on "Keys and Access Tokens". Under "Your Access Token" click on "Create my access token".
+
+In your `config.yml` file, copy and paste your `Consumer Key`, `Consumer Secret`, `Access Token`, and `Access Token Secret` in to their respective fields (I would suggest pasting them into the `default` section, but you can assign them to specific groups if you wish). Note that you shouldn't have any quotes around the keys in the `.yml` file. It should look something like:
+
+    :twitter:
+      default:
+        :consumer_key: abc
+        :consumer_secret: def
+        :access_token: ghi-jkl
+        :access_token_secret: mnop

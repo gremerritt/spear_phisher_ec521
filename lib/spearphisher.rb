@@ -16,8 +16,9 @@ module SpearPhisher
 
     command :collect do |c|
       c.syntax = 'spearphisher collect'
-      c.option "--group [#{@groups.join '/'}]", String, 'Group to collect tweets for, based on keywords'
-      c.option '--links [true/false]', String, 'Collect only tweets that include links'
+      c.option "--group [#{@groups.join '/'}]", String, 'Group to collect tweets for, based on keywords in lib/keywords'
+      c.option '--links [true/false]', String, "Collect only tweets that include links" \
+                                               "\nDefault: false"
       c.description = 'Collects recent and popular tweets'
       c.action do |args, options|
         options.default \
@@ -29,11 +30,15 @@ module SpearPhisher
 
     command :target do |c|
       c.syntax = 'spearphisher target'
-      c.option "--group [#{@groups.join '/'}]", String, 'Group to collect tweets for, based on keywords'
-      c.option '--send [true/false]', String, 'Collect only tweets that include links'
+      c.option "--group [#{@groups.join '/'}]", String, 'Credential set to use (keyword file must also exist in lib/keywords)'
+      c.option '--send [true/false]', String, "Actually tweet at users (USE WITH CAUTION)" \
+                                              "\nDefault: false"
       c.option '--hashtag [#<text>]', String, 'Hashtag to search for'
       c.option '--user [username]', String, 'User to target'
-      c.option '--count [#]', Integer, 'Number of users to target'
+      c.option '--count [#]', Integer, "Number of users to target" \
+                                       "\nDefault: 10"
+      c.option '--display_tweets [true/false]', String, "Display the tweets collected for a user" \
+                                                        "\nDefault: false"
       c.description = 'Draft or send generated tweets'
       c.action do |args, options|
         options.default \
@@ -41,7 +46,8 @@ module SpearPhisher
           :send  => 'false',
           :hashtag => nil,
           :user => nil,
-          :count => 10
+          :count => 10,
+          :display_tweets => 'false'
         SpearPhisher::Targeter.start options
       end
     end
