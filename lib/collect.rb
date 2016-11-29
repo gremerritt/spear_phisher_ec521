@@ -7,7 +7,7 @@ module SpearPhisher
     def self.start options
       raise "Invalid group" if !SpearPhisher.groups.include? options.group
 
-      @client = SpearPhisher.setup_client 'default'
+      @client = SpearPhisher.setup_client options.group
 
       search = "-rt"
       search << " filter:links" if options.links == 'true'
@@ -56,7 +56,7 @@ module SpearPhisher
               next if to.include?('|') || from.include?('|')
 
               text = tweet.text.gsub("|", " ").gsub("\n", " ").gsub("\r", " ")
-              text_abbr = abbreviate text
+              text_abbr = SpearPhisher.abbreviate text
 
               if rslts[from].nil?
                 rslts[from] = {to => format_tweet(tweet, text, text_abbr, in_reply_to_id)}
@@ -123,13 +123,6 @@ module SpearPhisher
       str << "#{info[:timestamp]}|"
       str << "#{info[:text]}|"
       str << "#{info[:text_abbr]}\n"
-    end
-
-    def self.abbreviate text
-      # this regex removes @ mentions and links from the text
-      # in order to prevent 'duplicate' tweets (i.e. bulk tweets
-      # sent from one user to many others) from being collected
-      text.gsub(/(?<=^|\s)@(\S+)($|\s)/, "").gsub(/(?<=^|\s)http(\S+)($|\s)/, "")
     end
 
     def self.write_rslts rslts, rslt_file
