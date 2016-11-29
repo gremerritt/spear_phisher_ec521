@@ -1,6 +1,7 @@
 *.yml
 *.csv
 !config_sample.yml
+*.gem
 
 # Mihailo
 venv/
