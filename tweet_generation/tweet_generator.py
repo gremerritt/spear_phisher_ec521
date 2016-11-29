@@ -14,7 +14,7 @@ from __future__ import print_function
 from keras.models import Sequential
 from keras.layers import Dense, Activation, Dropout
 from keras.layers import LSTM
-from keras.optimizers import RMSprop
+from keras.optimizers import RMSprop, Adam
 from keras.utils.data_utils import get_file
 import numpy as np
 import random
@@ -60,14 +60,15 @@ for i, sentence in enumerate(sentences):
 print('Build model...')
 model = Sequential()
 # model.add(LSTM(128, input_shape=(maxlen, len(chars))))
-model.add(LSTM(256, return_sequences=True, input_shape=(maxlen, len(chars))))
+model.add(LSTM(128, return_sequences=True, input_shape=(maxlen, len(chars))))
 model.add(Dropout(0.2))
-model.add(LSTM(256, return_sequences=False))
+model.add(LSTM(128, return_sequences=False))
 model.add(Dropout(0.2))
 model.add(Dense(len(chars)))
 model.add(Activation('softmax'))
 
-optimizer = RMSprop(lr=0.01)
+#optimizer = RMSprop(lr=3e-4)
+optimizer = Adam(lr=3e-3, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer)
 
 
