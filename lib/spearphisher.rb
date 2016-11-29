@@ -34,6 +34,7 @@ module SpearPhisher
       c.option '--hashtag [#<text>]', String, 'Hashtag to search for'
       c.option '--user [username]', String, 'User to target'
       c.option '--count [#]', Integer, 'Number of users to target'
+      c.option '--display_tweets [true/false]', String, 'Display the tweets collected for a user'
       c.description = 'Draft or send generated tweets'
       c.action do |args, options|
         options.default \
@@ -41,7 +42,8 @@ module SpearPhisher
           :send  => 'false',
           :hashtag => nil,
           :user => nil,
-          :count => 10
+          :count => 10,
+          :display_tweets => 'false'
         SpearPhisher::Targeter.start options
       end
     end

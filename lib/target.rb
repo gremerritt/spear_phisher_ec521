@@ -5,6 +5,7 @@ module SpearPhisher
     def self.start options
       raise "Invalid group" if !SpearPhisher.groups.include? options.group
       @send = options.send == 'true' ? true : false
+      @display = options.display_tweets == 'true' ? true : false
 
       if (options.hashtag.nil? && options.user.nil?) ||
          (!options.hashtag.nil? && !options.user.nil?)
@@ -36,7 +37,7 @@ module SpearPhisher
             username = tweet.user.screen_name
             if !(users.include?(username))
               puts "\nUsername: #{username}\nOriginal Tweet: #{tweet.text}"
-              users.push username 
+              users.push username
               generate_tweet username
             end
           end
@@ -78,9 +79,16 @@ module SpearPhisher
 
     def self.generate_tweet_text tweets
       puts "  Generating a tweet"
+      display_tweets tweets if @display
       # This is where we'll use the NN and the recent tweets to generate
       # a tweet to that user
       "Some sample return"
+    end
+
+    def self.display_tweets tweets
+      tweets.each do |tweet|
+        puts tweet.values.join '|'
+      end
     end
 
     def self.send_tweet username, text, in_reply_to = nil
