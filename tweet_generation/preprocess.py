@@ -15,19 +15,19 @@ def load_tweets(path="data/tweets300k.csv"):
     return tweets
 
 
-def _replace_mentions(tweet, text="AT"):
+def _replace_mentions(tweet, text="usr"):
     return re.sub('@[0-9a-zA-Z_]+', text, tweet) 
 
 
-def _replace_hashtags(tweet, text="HASH"):
+def _replace_hashtags(tweet, text="hsh"):
     return re.sub('#[0-9a-zA-Z_]+', text, tweet) 
 
 
-def _replace_urls(tweet, text="URL"):
+def _replace_urls(tweet, text="lnk"):
     return re.sub('https?:\/\/t\.co\/[a-zA-Z0-9]*', text, tweet)
 
 
-whitelist = re.compile(ur'[^!()-,\.\/0123456789:;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz\n\t ]')
+whitelist = re.compile(ur'[^!?,\.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\n\t ]')
 def _remove_extra_characters(tweet):
     """
     Removes characters not found in the whitelist above. 
@@ -67,7 +67,7 @@ def long_tweets(tweets, length=20):
     Returns tweets longer than a given length
     """
     return [t for t in tweets if len(t) > length]
-    
+   
 
 def main():
     tweets = load_tweets("data/tweets300k.csv")
