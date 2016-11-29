@@ -2,7 +2,7 @@ import re
 import codecs
 
 
-def load_tweets(path="data/tweets300k.csv"):
+def load_tweets(path="data/tweets_cybersecurity.csv"):
     """
     Returns the tweet column from the csv file.
     (CSV in this case uses "|" as the delimiter because "," appears in the text more often)
@@ -27,7 +27,7 @@ def _replace_urls(tweet, text="lnk"):
     return re.sub('https?:\/\/t\.co\/[a-zA-Z0-9]*', text, tweet)
 
 
-whitelist = re.compile(ur'[^!?,\.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\n\t ]')
+whitelist = re.compile(ur'[^!?#,\.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\n\t ]')
 def _remove_extra_characters(tweet):
     """
     Removes characters not found in the whitelist above. 
@@ -44,7 +44,7 @@ def clean_tweets(tweets):
         tweet = tweet.lower()
         tweet = _replace_urls(tweet)
         tweet = _replace_mentions(tweet)
-        tweet = _replace_hashtags(tweet)
+        # tweet = _replace_hashtags(tweet)
         tweet = _remove_extra_characters(tweet)
 
         tweets[index] = tweet
