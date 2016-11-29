@@ -8,6 +8,12 @@ We'll assume you're installing on Kali Linux, using Python2.7 and Ruby2.2+ (thou
 
 This application comes with a pre-trained Neural Network which generated tweets based on a large sample. Instructions for collecting training data and training the NN can be found [below](#TrainingYourOwnModel).
 
+To install, simply run:
+
+    $ ./install.sh
+
+in the project directory. This will install all dependancies and install the project. If this doesn't work, you can follow along manually below.
+
 First install the Python dependancies:
 
 Install `TensorFlow`. General instructions are [here](https://www.tensorflow.org/versions/r0.12/get_started/os_setup.html). TL;DR
@@ -18,9 +24,11 @@ Install `keras`. General instructions are [here](https://github.com/fchollet/ker
 
     $ sudo pip install keras
 
-Now for the Ruby. Make sure you're in the root of the project directory.
+Install `h5py`:
 
-Make sure bundler is up-to-date:
+    $ pip install h5py
+
+Now for the Ruby. Make sure bundler is up-to-date:
 
     $ gem update bundler
 
