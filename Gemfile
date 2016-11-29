@@ -1,3 +1,4 @@
 source 'https://rubygems.org'
 
-gem 'twitter', '~> 5.16'
+# Specify your gem's dependencies in henchman.gemspec
+gemspec
