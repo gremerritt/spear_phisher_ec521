@@ -32,7 +32,7 @@ char_indices = dict((c, i) for i, c in enumerate(chars))
 indices_char = dict((i, c) for i, c in enumerate(chars))
 
 # HACK
-tweets = tweets[:10000]
+tweets = tweets[:100000]
 
 # cut the text in semi-redundant sequences of maxlen characters
 maxlen = 30
@@ -87,7 +87,7 @@ try:
         print()
         print('-' * 50)
         print('Iteration', iteration)
-        model.fit(X, y, batch_size=128, nb_epoch=1)
+        model.fit(X, y, batch_size=256, nb_epoch=1)
 
         # start_index = random.randint(0, len(text) - maxlen - 1)
         tweet_index = random.randint(0, len(tweets))
@@ -120,7 +120,7 @@ try:
             print()
 
 except KeyboardInterrupt:
-    print("Saving model. You might want to move it so it's not overritten.")
+    print("\nSaving model. You might want to move it so it's not overritten.")
     model.save("2l_lstm.h5")
 
 
