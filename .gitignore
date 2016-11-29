@@ -2,6 +2,7 @@
 *.csv
 !config_sample.yml
 *.gem
+Gemfile.lock
 
 # Mihailo
 venv/
