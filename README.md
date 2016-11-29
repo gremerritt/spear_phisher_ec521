@@ -6,7 +6,7 @@ THIS APPLICATION IS TO BE USED FOR EDUCATIONAL PURPOSES ONLY. It was written as 
 
 We'll assume you're installing on Kali Linux, using Python2.7 and Ruby2.2+ (though instructions should be similar for different platforms / versions.)
 
-This application comes with a pre-trained Neural Network which generated tweets based on a large sample. Instructions for collecting training data and training the NN can be found [below](#Training Your Own Model).
+This application comes with a pre-trained Neural Network which generated tweets based on a large sample. Instructions for collecting training data and training the NN can be found [below](#TrainingYourOwnModel).
 
 First install the Python dependancies:
 
@@ -44,7 +44,7 @@ You can run the following to get detailed command-line options
     $ spearphisher -h
     $ spearphisher [COMMAND] -h
 
-First, copy or rename the `config_sample.yml` file to `config.yml`. Follow [these instructions](#Creating a Twitter Client) for creating credentials. As should be obvious from the format of the config file, you can set up different accounts and control which account you use for any given run.
+First, copy or rename the `config_sample.yml` file to `config.yml`. Follow [these instructions](#CreateATwitterClient) for creating credentials. As should be obvious from the format of the config file, you can set up different accounts and control which account you use for any given run.
 
 To create a phishing tweet to a specific user, use:
 
@@ -80,6 +80,7 @@ The full list of options is below:
           Default: false
 
 
+<a name="TrainingYourOwnModel"></a>
 ## Training Your Own Model
 
 ### Generating Sample Tweets
@@ -101,7 +102,7 @@ If you'd like to target specific groups, you can create a file in lib/keywords w
 
 ### Training the Neural Network
 
-
+<a name="CreateATwitterClient"></a>
 ## Creating a Twitter Client
 
 Go to [twitter.com](https://twitter.com) and log in to your account, or create a new one. Make sure you've provided your phone number, as you will not be able to generate API credentials without it on file. Once you're logged into you account go to [dev.twitter.com](https://dev.twitter.com) and click on "My apps". Click "Create New App" and fill in the required fields. Once your application is created, open the settings for the application and click on "Keys and Access Tokens". Under "Your Access Token" click on "Create my access token".
