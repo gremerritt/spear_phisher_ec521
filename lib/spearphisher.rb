@@ -55,7 +55,7 @@ module SpearPhisher
           :display_tweets => 'false',
           :link => '',
           :data_path => File.expand_path('tweet_generation/data/tweets300k.csv'),
-          :model_path => File.expand_path('tweet_generation/lstm.h5')
+          :model_path => File.expand_path('tweet_generation/models/lstm256.h5')
         SpearPhisher::Targeter.start options
       end
     end
