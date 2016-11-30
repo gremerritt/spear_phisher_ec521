@@ -15,6 +15,17 @@ def load_tweets(path="data/tweets_cybersecurity.csv"):
     return tweets
 
 
+def load_target_tweets(path):
+    """
+    For some reason, target tweets are not in the same as the dataset tweets
+    """
+    f = codecs.open(path, encoding="utf-8")
+    lines = f.readlines()
+    tweets = [t.split('|')[1] for t in lines]
+
+    return tweets
+
+
 def _replace_mentions(tweet, text="usr"):
     return re.sub('@[0-9a-zA-Z_]+', text, tweet) 
 
