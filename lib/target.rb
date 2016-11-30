@@ -89,7 +89,7 @@ module SpearPhisher
       display_tweets tweets if @display
       save_tweets tweets
 
-      tweet = `python tweet_generation/generator.py #{model_path} #{data_path} #{user_tweets_path}`
+      tweet = `python tweet_generation/generator.py #{@model_path} #{@data_path} #{@user_tweets_path}`
       # This is where we'll use the NN and the recent tweets to generate
       # a tweet to that user
       puts tweet
