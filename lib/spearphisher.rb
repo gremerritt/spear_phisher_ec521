@@ -41,9 +41,9 @@ module SpearPhisher
                                                         "\nDefault: false"
       c.option '--link [link]', String, "Link (or any string) to append to each tweet"
       c.option '--data_path [path]', String, "Relative path to tweet training data" \
-                                             "Default: tweet_generation/data/tweets300k.csv"
+                                             "\nDefault: tweet_generation/data/tweets300k.csv"
       c.option '--model_path [path]', String, "Relative path to neural net model" \
-                                              "Default: tweet_generation/lstm.h5"
+                                              "\nDefault: tweet_generation/lstm.h5"
       c.description = 'Draft or send generated tweets'
       c.action do |args, options|
         options.default \
