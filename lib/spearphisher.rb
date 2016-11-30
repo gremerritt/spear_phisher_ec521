@@ -40,6 +40,10 @@ module SpearPhisher
       c.option '--display_tweets [true/false]', String, "Display the tweets collected for a user" \
                                                         "\nDefault: false"
       c.option '--link [link]', String, "Link (or any string) to append to each tweet"
+      c.option '--data_path [path]', String, "Relative path to tweet training data" \
+                                             "Default: tweet_generation/data/tweets300k.csv"
+      c.option '--model_path [path]', String, "Relative path to neural net model" \
+                                              "Default: tweet_generation/lstm.h5"
       c.description = 'Draft or send generated tweets'
       c.action do |args, options|
         options.default \
@@ -49,7 +53,9 @@ module SpearPhisher
           :user => nil,
           :count => 10,
           :display_tweets => 'false',
-          :link => ''
+          :link => '',
+          :data_path => File.expand_path('tweet_generation/data/tweets300k.csv'),
+          :model_path => File.expand_path('tweet_generation/lstm.h5')
         SpearPhisher::Targeter.start options
       end
     end

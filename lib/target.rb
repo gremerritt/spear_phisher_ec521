@@ -7,6 +7,9 @@ module SpearPhisher
       @send = options.send == 'true' ? true : false
       @display = options.display_tweets == 'true' ? true : false
       @link = options.link
+      @user_tweets_path = File.expand_path 'user_tweets.csv'
+      @data_path = options.data_path
+      @model_path = options.model_path
 
       if (options.hashtag.nil? && options.user.nil?) ||
          (!options.hashtag.nil? && !options.user.nil?)
@@ -84,14 +87,26 @@ module SpearPhisher
     def self.generate_tweet_text tweets
       puts "  Generating a tweet"
       display_tweets tweets if @display
+      save_tweets tweets
+
+      tweet = `python -c 'from tweet_generation/generator.py import *; print main(#{@model_path}, #{@data_path, @user_tweets_path})'`
       # This is where we'll use the NN and the recent tweets to generate
       # a tweet to that user
+      puts tweet
       "Some sample return"
     end
 
     def self.display_tweets tweets
       tweets.each do |tweet|
         puts tweet.values.join '|'
+      end
+    end
+
+    def self.save_tweets tweets
+      File.open(@user_tweets_path, "w") do |file|
+        tweets.each do |tweet|
+          file.write "#{tweet.values.join('|')}\n"
+        end
       end
     end
 
