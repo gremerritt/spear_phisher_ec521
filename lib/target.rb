@@ -6,6 +6,7 @@ module SpearPhisher
       raise "Invalid group" if !SpearPhisher.groups.include? options.group
       @send = options.send == 'true' ? true : false
       @display = options.display_tweets == 'true' ? true : false
+      @link = options.link
 
       if (options.hashtag.nil? && options.user.nil?) ||
          (!options.hashtag.nil? && !options.user.nil?)
@@ -92,8 +93,10 @@ module SpearPhisher
     end
 
     def self.send_tweet username, text, in_reply_to = nil
-      puts "  #{@send ? 'Sending' : 'Would send'} '#{text}' to #{username}"
-      @client.update("@#{username} #{text}", :in_reply_to_status_id => in_reply_to) if @send
+      tweet = "@#{username} #{text}"
+      tweet << " #{@link}" if !@link.empty?
+      puts "  #{@send ? 'Sending' : 'Would send'} '#{tweet}' to #{username}"
+      @client.update(tweet, :in_reply_to_status_id => in_reply_to) if @send
     end
 
     def self.collect_with_max_id(collection=[], max_id=nil, &block)

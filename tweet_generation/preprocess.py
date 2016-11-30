@@ -19,7 +19,7 @@ def _replace_mentions(tweet, text="usr"):
     return re.sub('@[0-9a-zA-Z_]+', text, tweet) 
 
 
-def _replace_hashtags(tweet, text="hsh"):
+def _replace_hashtags(tweet, text=""):
     return re.sub('#[0-9a-zA-Z_]+', text, tweet) 
 
 
@@ -36,6 +36,16 @@ def _remove_extra_characters(tweet):
     return re.sub(whitelist, '', tweet)
 
 
+def _remove_extra_links(tweet):
+    i = tweet.find("lnk")
+    tweet = tweet.replace("lnk", "")
+    return tweet[:i] + "lnk" + tweet[i:]
+
+
+def _remove_duplicate_space(tweet):
+    return re.sub(' +', ' ', tweet)
+
+
 def clean_tweets(tweets):
     """
     Removes urls, mentions, hashtags, and removes non-common characters from each tweet.
@@ -44,8 +54,10 @@ def clean_tweets(tweets):
         tweet = tweet.lower()
         tweet = _replace_urls(tweet)
         tweet = _replace_mentions(tweet)
-        # tweet = _replace_hashtags(tweet)
+        tweet = _replace_hashtags(tweet, text="")
+        tweet = _remove_extra_links(tweet)
         tweet = _remove_extra_characters(tweet)
+        tweet = _remove_duplicate_space(tweet) 
 
         tweets[index] = tweet
 

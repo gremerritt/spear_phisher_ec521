@@ -8,6 +8,8 @@ import numpy as np
 import random
 import sys
 
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+
 
 def load_model(path):
     from keras.models import load_model
@@ -58,4 +60,35 @@ def _generate_tweet(model, seed_text, chars, text_length=100, diversity=0.5):
         seed_text = seed_text[1:] + next_char
 
     return generated
+
+
+def _find_representative(all_tweets, target_tweets, length):
+    """
+    Finds a the most representative tweet in a targets tweets and returns it.
+    """
+    # picks at random for now until i figure out how to get good results with TFIDF
+    tweet = None
+    while not tweet:
+        i = np.random.randint(len(target_tweets))
+        test = target_tweets[i]
+
+        # check if there isnt an username in the text
+        if len(test) > length and "usr" not in test:
+            return test[:length]
+
+
+def _generate_seed(all_tweets, target_tweets, length):
+    """
+    Generates a good seed from a persons tweet history.
+    target_tweets is a list of a persons tweets in unicode,
+    all_tweets is a list of all tweets, 
+    length is the length of the resulting seed.
+    """
+    # cv = CountVectorizer()
+    # all_counts = cv.fit_transform(all_tweets)
+
+    # tfidf = TfidfTransformer()
+    # X_train = tfidf.fit_transform(all_counts)
+    return _find_representative(all_tweets, target_tweets, length)
+    
 
