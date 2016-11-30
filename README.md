@@ -97,6 +97,17 @@ The full list of options is below:
           Display the tweets collected for a user
           Default: false
 
+      --link [link]
+            Link (or any string) to append to each tweet
+
+      --data_path [path]
+            Relative path to tweet training data
+            Default: tweet_generation/data/tweets300k.csv
+
+      --model_path [path] 
+            Relative path to neural net model
+            Default: tweet_generation/lstm.h5
+
 
 <a name="TrainingYourOwnModel"></a>
 ## Training Your Own Model
