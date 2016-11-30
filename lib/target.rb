@@ -96,6 +96,7 @@ module SpearPhisher
 
       tweet = `python tweet_generation/generator.py #{@model_path} #{@data_path} #{@user_tweets_path}`
       tweet = tweet.split("lnk")[0]
+      tweet.gsub!("usr", "")
       tweet = tweet[0..max_len]
       return tweet
     end
