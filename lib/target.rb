@@ -77,23 +77,26 @@ module SpearPhisher
       if tweets.length > 0
         len = tweets.length
         puts "  #{len} tweet#{(len == 1) ? '' : 's'} found"
-        text = generate_tweet_text tweets
+
+        max_txt_len = 140 - (username.length + 2)
+        if !@link.empty?
+          max_txt_len -= @link.length + 1
+        end
+        text = generate_tweet_text tweets, max_txt_len
         send_tweet username, text, id
       else
         puts "  No tweets found for #{username}"
       end
     end
 
-    def self.generate_tweet_text tweets
+    def self.generate_tweet_text tweets, max_len
       puts "  Generating a tweet"
       display_tweets tweets if @display
       save_tweets tweets
 
       tweet = `python tweet_generation/generator.py #{@model_path} #{@data_path} #{@user_tweets_path}`
-      # This is where we'll use the NN and the recent tweets to generate
-      # a tweet to that user
-      puts tweet
-      "Some sample return"
+      tweet = tweet[0..max_len]
+      return tweet
     end
 
     def self.display_tweets tweets
