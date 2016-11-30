@@ -23,7 +23,7 @@ import sys
 # path = get_file('nietzsche.txt', origin="https://s3.amazonaws.com/text-datasets/nietzsche.txt")
 # text = open(path).read().lower()
 import preprocess
-tweets = preprocess.clean_tweets(preprocess.load_tweets())
+tweets = preprocess.clean_tweets(preprocess.load_tweets("data/tweets_cybersecurity.csv"))
 print('number of tweets:', len(tweets))
 
 chars = sorted(list(set("".join(tweets))))
@@ -32,11 +32,11 @@ char_indices = dict((c, i) for i, c in enumerate(chars))
 indices_char = dict((i, c) for i, c in enumerate(chars))
 
 # HACK
-tweets = tweets[:100000]
+#tweets = tweets[:10000]
 
 # cut the text in semi-redundant sequences of maxlen characters
-maxlen = 30
-step = 2
+maxlen = 20
+step = 10 
 sentences = []
 next_chars = []
 for tweet in tweets:
@@ -60,15 +60,15 @@ for i, sentence in enumerate(sentences):
 print('Build model...')
 model = Sequential()
 # model.add(LSTM(128, input_shape=(maxlen, len(chars))))
-model.add(LSTM(128, return_sequences=True, input_shape=(maxlen, len(chars))))
+model.add(LSTM(256, return_sequences=True, input_shape=(maxlen, len(chars))))
 model.add(Dropout(0.2))
-model.add(LSTM(128, return_sequences=False))
+model.add(LSTM(256, return_sequences=False))
 model.add(Dropout(0.2))
 model.add(Dense(len(chars)))
 model.add(Activation('softmax'))
 
 #optimizer = RMSprop(lr=3e-4)
-optimizer = Adam(lr=3e-3, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
+optimizer = Adam(lr=1e-2, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer)
 
 
@@ -92,7 +92,7 @@ try:
         # start_index = random.randint(0, len(text) - maxlen - 1)
         tweet_index = random.randint(0, len(tweets))
 
-        for diversity in [0.2, 0.5, 1.0, 1.2]:
+        for diversity in [0.3, 0.5, 0.7, 0.9]:
             print()
             print('----- diversity:', diversity)
 
@@ -121,6 +121,6 @@ try:
 
 except KeyboardInterrupt:
     print("\nSaving model. You might want to move it so it's not overritten.")
-    model.save("2l_lstm.h5")
+    model.save("lstm.h5")
 
 

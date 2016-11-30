@@ -36,10 +36,13 @@ module SpearPhisher
           tweets = @client.search("#{options.hashtag} -rt", lang: "en", result_type: "recent").take(options.count)
           tweets.each do |tweet|
             username = tweet.user.screen_name
+            id = tweet.id
             if !(users.include?(username))
-              puts "\nUsername: #{username}\nOriginal Tweet: #{tweet.text}"
+              puts "\nUsername: #{username}"
+              puts "Link: https://twitter.com/#{username}/status/#{id}"
+              puts "Tweet: #{tweet.text}"
               users.push username
-              generate_tweet username
+              generate_tweet username, id
             end
           end
         elsif !options.user.nil?
@@ -64,7 +67,7 @@ module SpearPhisher
 
     end
 
-    def self.generate_tweet username
+    def self.generate_tweet username, id
       tweets = Array.new
       get_tweets_for_user username, tweets
 
@@ -72,7 +75,7 @@ module SpearPhisher
         len = tweets.length
         puts "  #{len} tweet#{(len == 1) ? '' : 's'} found"
         text = generate_tweet_text tweets
-        send_tweet username, text
+        send_tweet username, text, id
       else
         puts "  No tweets found for #{username}"
       end
