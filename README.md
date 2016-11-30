@@ -8,6 +8,11 @@ We'll assume you're installing on Kali Linux, using Python2.7 and Ruby2.2+ (thou
 
 This application comes with a pre-trained Neural Network which generated tweets based on a large sample. Instructions for collecting training data and training the NN can be found [below](#TrainingYourOwnModel).
 
+To download the code, clone this repository then cd into it:
+
+    $ git clone https://github.com/gremerritt/spear_phisher_ec521
+    $ cd spear_phisher_ec521
+
 To install, simply run:
 
     $ ./install.sh
