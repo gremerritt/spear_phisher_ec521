@@ -95,6 +95,7 @@ module SpearPhisher
       save_tweets tweets
 
       tweet = `python tweet_generation/generator.py #{@model_path} #{@data_path} #{@user_tweets_path}`
+      tweet = tweet.split("lnk")[0]
       tweet = tweet[0..max_len]
       return tweet
     end
