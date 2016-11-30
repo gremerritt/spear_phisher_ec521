@@ -4,7 +4,7 @@ import numpy as np
 # from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
 import preprocess
-
+import sys
 
 def text2one_hot(text, char_indices):
     """
@@ -70,7 +70,7 @@ def _generate_seed(all_tweets, target_tweets, length):
     """
     Generates a good seed from a persons tweet history.
     target_tweets is a list of a persons tweets in unicode,
-    all_tweets is a list of all tweets, 
+    all_tweets is a list of all tweets,
     length is the length of the resulting seed.
     """
     # cv = CountVectorizer()
@@ -88,7 +88,7 @@ def generate(model, all_tweets, target_tweets, text_length, seed_length, diversi
     tweet = _generate_tweet(model, seed, chars, text_length, diversity)
 
     return tweet
-    
+
 
 def main(model_path, all_tweets_path, target_tweets_path):
     model = load_model(model_path)
@@ -101,4 +101,5 @@ def main(model_path, all_tweets_path, target_tweets_path):
 
 
 if __name__ == "__main__":
-    print main("lstm.h5", "data/tweets_cybersecurity.csv", "data/swift.csv")
+    #print main("lstm.h5", "data/tweets_cybersecurity.csv", "data/swift.csv")
+    print main(sys.argv[1], sys.argv[2], sys.argv[3])
