@@ -13,6 +13,11 @@ To download the code, clone this repository then cd into it:
     $ git clone https://github.com/gremerritt/spear_phisher_ec521
     $ cd spear_phisher_ec521
 
+Then download our pre-generated file of sample tweets - [DOWNLOAD LINK](https://www.dropbox.com/s/w5uoq5k1l8unka6/tweets300k.csv?dl=1) - and put them in a directory called `data` in the `tweet_generation` directory. (These files are unfortunately too big to store on Github!)
+
+    $ mkdir tweet_generation/data
+    $ mv <downloaded file> tweet_generation/data/
+
 To install, simply run:
 
     $ ./install.sh
