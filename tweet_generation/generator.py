@@ -1,20 +1,9 @@
-from __future__ import print_function
-from keras.models import Sequential
-from keras.layers import Dense, Activation, Dropout
-from keras.layers import LSTM
-from keras.optimizers import RMSprop
-from keras.utils.data_utils import get_file
+from keras.models import load_model
 import numpy as np
-import random
-import sys
 
-from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+# from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
-
-def load_model(path):
-    from keras.models import load_model
-    model = load_model(path)
-    return model
+import preprocess
 
 
 def text2one_hot(text, char_indices):
@@ -39,7 +28,7 @@ def sample(preds, temperature=1.0):
     return np.argmax(probas)
 
 
-def _generate_tweet(model, seed_text, chars, text_length=100, diversity=0.5):
+def _generate_tweet(model, seed_text, chars, text_length, diversity):
     """
     Generates a tweet using some seed. The seed needs to be some text of the same length the network was trained on.
     """
@@ -66,14 +55,14 @@ def _find_representative(all_tweets, target_tweets, length):
     """
     Finds a the most representative tweet in a targets tweets and returns it.
     """
-    # picks at random for now until i figure out how to get good results with TFIDF
-    tweet = None
-    while not tweet:
+    # HACK picks at random for now until i figure out how to get good results with TFIDF
+    while True:
         i = np.random.randint(len(target_tweets))
         test = target_tweets[i]
 
         # check if there isnt an username in the text
-        if len(test) > length and "usr" not in test:
+        # if len(test) > length and "usr" not in test[:length]:
+        if len(test) > length:
             return test[:length]
 
 
@@ -90,5 +79,26 @@ def _generate_seed(all_tweets, target_tweets, length):
     # tfidf = TfidfTransformer()
     # X_train = tfidf.fit_transform(all_counts)
     return _find_representative(all_tweets, target_tweets, length)
+
+
+def generate(model, all_tweets, target_tweets, text_length, seed_length, diversity):
+    chars = sorted(list(set("".join(all_tweets))))
+
+    seed = _generate_seed(all_tweets, target_tweets, seed_length)
+    tweet = _generate_tweet(model, seed, chars, text_length, diversity)
+
+    return tweet
     
 
+def main(model_path, all_tweets_path, target_tweets_path):
+    model = load_model(model_path)
+    all_tweets = preprocess.clean_tweets(preprocess.load_tweets(all_tweets_path))
+    target_tweets = preprocess.clean_tweets(preprocess.load_target_tweets(target_tweets_path))
+
+    tweet = generate(model, all_tweets, target_tweets, text_length=100, seed_length=20, diversity=0.5)
+
+    return tweet
+
+
+if __name__ == "__main__":
+    print main("lstm.h5", "data/tweets_cybersecurity.csv", "data/swift.csv")
