@@ -92,7 +92,7 @@ try:
         # start_index = random.randint(0, len(text) - maxlen - 1)
         tweet_index = random.randint(0, len(tweets))
 
-        for diversity in [0.2, 0.5, 1.0, 1.2]:
+        for diversity in [0.3, 0.5, 0.7, 0.9]:
             print()
             print('----- diversity:', diversity)
 
@@ -121,6 +121,6 @@ try:
 
 except KeyboardInterrupt:
     print("\nSaving model. You might want to move it so it's not overritten.")
-    model.save("2l_lstm.h5")
+    model.save("lstm.h5")
 
 
