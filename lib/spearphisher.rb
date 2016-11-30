@@ -39,6 +39,7 @@ module SpearPhisher
                                        "\nDefault: 10"
       c.option '--display_tweets [true/false]', String, "Display the tweets collected for a user" \
                                                         "\nDefault: false"
+      c.option '--link [link]', String, "Link (or any string) to append to each tweet"
       c.description = 'Draft or send generated tweets'
       c.action do |args, options|
         options.default \
@@ -47,7 +48,8 @@ module SpearPhisher
           :hashtag => nil,
           :user => nil,
           :count => 10,
-          :display_tweets => 'false'
+          :display_tweets => 'false',
+          :link => ''
         SpearPhisher::Targeter.start options
       end
     end
