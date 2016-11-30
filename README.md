@@ -104,9 +104,9 @@ The full list of options is below:
             Relative path to tweet training data
             Default: tweet_generation/data/tweets300k.csv
 
-      --model_path [path] 
+      --model_path [path]
             Relative path to neural net model
-            Default: tweet_generation/lstm.h5
+            Default: tweet_generation/models/lstm256.h5
 
 
 <a name="TrainingYourOwnModel"></a>
